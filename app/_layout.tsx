@@ -1,5 +1,5 @@
-import { Stack } from "expo-router";
+import Navigation from "@/components/Navigation";
 
 export default function RootLayout() {
-  return <Stack />;
+  return <Navigation />;
 }
