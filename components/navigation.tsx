@@ -21,20 +21,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="radar"
-        options={{
-            title: 'Radar',
-            tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'map' : 'map-outline'} color={color} size={24} />
-            ),
-        }}
-      />
-      <Tabs.Screen
         name="search"
         options={{
           title: 'Search',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'search' : 'search-outline'} color={color} size={24}/>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="setting"
+        options={{
+          title: 'Setting',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} size={24} color={color}/>
           ),
         }}
       />
