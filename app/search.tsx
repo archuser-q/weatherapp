@@ -9,7 +9,7 @@ const About = () => {
             alignItems: "center",
           }}
         >
-            <Text>About page</Text>
+            <Text>Search page</Text>
         </View>
     );
 }
