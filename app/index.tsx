@@ -12,7 +12,7 @@ export default function Index() {
   return (
     <SafeAreaProvider>
       <ScrollView>
-        <View className="flex-1 items-center justify-center bg-gray-50 pt-20">
+        <View className="flex-1 items-center justify-center pt-20">
           <View className="items-center mb-8">
             <Fontisto name="cloudy" size={200} color="black" />
             <View className='-mt-[20px] pb-5 items-center'>
