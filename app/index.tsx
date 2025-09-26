@@ -28,9 +28,8 @@ export default function Index() {
           </View>
         </View>
 
-        {/* Hourly Forecast ScrollView */}
         <View className="w-full px-4">
-          <Text className="text-lg font-bold mb-3 text-center">Dự báo theo giờ</Text>
+          <Text className="text-lg font-bold mb-3 text-center">Hourly Forecast</Text>
           <ScrollView 
             horizontal 
             showsHorizontalScrollIndicator={false}
