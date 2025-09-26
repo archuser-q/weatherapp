@@ -12,7 +12,7 @@ export default function Index() {
   return (
     <SafeAreaProvider>
       <ScrollView>
-        <View className="flex-1 items-center justify-center bg-gray-50">
+        <View className="flex-1 items-center justify-center bg-gray-50 pt-20">
           <View className="items-center mb-8">
             <Fontisto name="cloudy" size={200} color="black" />
             <View className='-mt-[20px] pb-5 items-center'>
@@ -66,23 +66,21 @@ export default function Index() {
               contentContainerStyle={{ paddingHorizontal: 20 }}
             >
               {weeklyForecast.map((item, index) => (
-                <View 
+                <View
                   key={index}
-                  className="rounded-2xl w-full flex-row justify-between items-center bg-white p-4 mb-2 shadow-sm border border-gray-200"
+                  className="flex-row items-center bg-white p-4 mb-2 rounded-2xl shadow-sm border justify-between border-gray-200"
                 >
-                  <View className="flex-1">
-                    <Text className="text-sm font-medium text-gray-800">
-                      {item.day}
-                    </Text>
+                  <View className="w-24">
+                    <Text className="text-sm font-medium text-gray-800">{item.day}</Text>
                   </View>
-                  <View className="flex-1 items-center">
+                  <View className="w-16 items-center">
                     <Ionicons name="rainy-outline" size={20} color="blue" />
                     <Text className="text-sm text-blue-600">{item.rain}%</Text>
                   </View>
-                  <View className="flex-1 items-center">
+                  <View className="w-16 items-center">
                     <Text className="text-sm text-gray-700">{item.low}°C</Text>
                   </View>
-                  <View className="flex-1 items-center">
+                  <View className="w-16 items-center">
                     <Text className="text-sm text-gray-700">{item.high}°C</Text>
                   </View>
                 </View>
