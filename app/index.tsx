@@ -52,7 +52,7 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
         >
           <Text
-            className="text-4xl font-normal pt-5 py-3 pl-4"
+            className="text-4xl font-normal pt-10 py-3 pl-4"
             style={{ lineHeight: 50 }}
           >
             Manage cities
@@ -101,21 +101,18 @@ export default function Index() {
                 renderRightActions={() => renderRightActions(city.id)}
                 overshootRight={false}
               >
-                <View className={`${bgColor} rounded-3xl p-5 mb-4 h-30`}>
+                <View className={`${bgColor} rounded-3xl p-5 mb-4 h-[105px]`}>
                   <View className="flex-row justify-between items-start">
                     <View className="flex-1">
                       <Text className="text-white text-3xl font-semibold mb-1">
                         {city.name}
-                      </Text>
-                      <Text className="text-white text-base opacity-90">
-                        {city.region}
                       </Text>
                       <Text className="text-white text-sm opacity-75 mt-1">
                         {condition}
                       </Text>
                     </View>
                     <View className="items-end">
-                      <Text className="text-white text-6xl font-light">
+                      <Text className="text-white text-5xl font-medium">
                         {city.temp}°
                       </Text>
                       <Text className="text-white text-base opacity-90">
