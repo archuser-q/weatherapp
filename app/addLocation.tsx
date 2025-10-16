@@ -23,7 +23,7 @@ export default function AddLocation() {
         </View>
 
         <Text className="text-gray-400 text-base mb-3">Current location</Text>
-        <TouchableOpacity className="bg-white rounded-2xl p-4 mb-6 flex-row items-center">
+        <TouchableOpacity className="bg-white rounded-2xl p-4 mb-6 flex-row">
           <Feather name="map-pin" size={22} color="#3B82F6" />
           <Text className="text-blue-500 text-base ml-3">Get current location</Text>
         </TouchableOpacity>
