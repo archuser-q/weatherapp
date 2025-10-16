@@ -1,32 +1,47 @@
+import { LOCATIONS_DATA } from "@/data/fixedCoordinate";
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import "../global.css";
 
-const LOCATIONS_DATA = [
-  { id: 1, name: "Hanbin", region: "Ankang, Shanxi, China" },
-  { id: 2, name: "Hancheng", region: "Weinan, Shanxi, China" },
-  { id: 3, name: "Hanchuan", region: "Xiaogan, Hubei, China" },
-  { id: 4, name: "Handan", region: "Handan, Hebei, China" },
-  { id: 5, name: "Hanggin Houqi", region: "Linhe, Neimenggu, China" },
-  { id: 6, name: "Hangjinqi", region: "Eerduosi, Neimenggu, China" },
-  { id: 7, name: "Hangzhou", region: "Hangzhou, Zhejiang, China" },
-  { id: 8, name: "Hanjiang", region: "Yangzhou, Jiangsu, China" },
-  { id: 9, name: "Hanjiang", region: "Putian, Fujian, China" },
-  { id: 10, name: "Hannan", region: "Wuhan, Hubei, China" },
-  { id: 11, name: "Hanoi", region: "Hanoi, Vietnam" },
-  { id: 12, name: "Bangkok", region: "Bangkok, Thailand" },
-  { id: 13, name: "Haiphong", region: "Haiphong, Vietnam" },
-];
+const SEARCH_HISTORY_KEY = "search_history";
 
 export default function AddLocation() {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
-  const handleSearch = (text:string) => {
+  useEffect(() => {
+    loadSearchHistory();
+  }, []);
+
+  const loadSearchHistory = async () => {
+    try {
+      const saved = await AsyncStorage.getItem(SEARCH_HISTORY_KEY);
+      if (saved) {
+        setSearchHistory(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error("Error loading search history:", error);
+    }
+  };
+
+  const saveSearchHistory = async (newHistory: string[]) => {
+    try {
+      await AsyncStorage.setItem(
+        SEARCH_HISTORY_KEY,
+        JSON.stringify(newHistory)
+      );
+    } catch (error) {
+      console.error("Error saving search history:", error);
+    }
+  };
+
+  const handleSearch = (text: string) => {
     setSearchText(text);
 
     if (text.trim() === "") {
@@ -40,6 +55,21 @@ export default function AddLocation() {
       );
       setFilteredResults(results);
     }
+  };
+
+  const handleSelectLocation = (locationName: string) => {
+    const alreadyExists = searchHistory.includes(locationName);
+    if (!alreadyExists) {
+      const newHistory = [locationName, ...searchHistory];
+      setSearchHistory(newHistory);
+      saveSearchHistory(newHistory);
+    }
+    router.back();
+  };
+
+  const clearSearchHistory = async () => {
+    setSearchHistory([]);
+    await saveSearchHistory([]);
   };
 
   return (
@@ -66,11 +96,7 @@ export default function AddLocation() {
               <TouchableOpacity
                 key={location.id}
                 className="bg-white rounded-2xl p-4 mb-3 border-b border-gray-100"
-                onPress={() => {
-                  // Xử lý khi chọn location
-                  console.log("Selected:", location.name);
-                  router.back();
-                }}
+                onPress={() => handleSelectLocation(location.name)}
               >
                 <Text className="text-black text-base font-semibold">
                   {location.name}
@@ -100,43 +126,27 @@ export default function AddLocation() {
 
             <View className="flex-row justify-between items-center mb-3">
               <Text className="text-gray-400 text-base">Search history</Text>
-              <Feather name="trash-2" size={20} color="#9CA3AF" />
-            </View>
-            <View className="flex-row mb-6">
-              <View className="bg-gray-100 rounded-2xl px-5 py-3 mr-3">
-                <Text className="text-black text-base">Hello</Text>
-              </View>
-              <View className="bg-gray-100 rounded-2xl px-5 py-3">
-                <Text className="text-black text-base">Hanoi</Text>
-              </View>
+              <TouchableOpacity onPress={clearSearchHistory}>
+                <Feather name="trash-2" size={20} color="#9CA3AF" />
+              </TouchableOpacity>
             </View>
 
-            <Text className="text-gray-400 text-base mb-3">
-              Popular locations
-            </Text>
-            <View className="flex-row flex-wrap mb-6">
-              <View className="bg-blue-50 rounded-2xl px-5 py-3 mr-3 mb-3">
-                <Text className="text-blue-500 text-base">Delhi</Text>
+            {searchHistory.length > 0 ? (
+              <View className="flex-row flex-wrap mb-6">
+                {searchHistory.map((term, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    className="bg-gray-100 rounded-2xl px-5 py-3 mr-3 mb-3"
+                    onPress={() => handleSearch(term)}
+                  >
+                    <Text className="text-black text-base">{term}</Text>
+                  </TouchableOpacity>
+                ))}
               </View>
-              <View className="bg-gray-100 rounded-2xl px-5 py-3 mr-3 mb-3">
-                <Text className="text-black text-base">Mumbai</Text>
-              </View>
-              <View className="bg-gray-100 rounded-2xl px-5 py-3 mb-3">
-                <Text className="text-black text-base">Jakarta</Text>
-              </View>
-              <View className="bg-blue-50 rounded-2xl px-5 py-3 mr-3 mb-3">
-                <Text className="text-blue-500 text-base">Kuala Lumpur</Text>
-              </View>
-              <View className="bg-gray-100 rounded-2xl px-5 py-3 mr-3 mb-3">
-                <Text className="text-black text-base">Singapore</Text>
-              </View>
-              <View className="bg-gray-100 rounded-2xl px-5 py-3 mr-3 mb-3">
-                <Text className="text-black text-base">Los Angeles</Text>
-              </View>
-              <View className="bg-gray-100 rounded-2xl px-5 py-3 mb-3">
-                <Text className="text-black text-base">New York</Text>
-              </View>
-            </View>
+            ) : (
+              <Text className="text-gray-400 text-sm mb-6 pt-5">
+              </Text>
+            )}
           </>
         )}
       </View>
