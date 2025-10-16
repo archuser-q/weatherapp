@@ -1,4 +1,3 @@
-// app/addLocation.tsx
 import { useWeatherStore } from "@/data/cities";
 import { LOCATIONS_DATA } from "@/data/fixedCoordinate";
 import { Feather } from "@expo/vector-icons";

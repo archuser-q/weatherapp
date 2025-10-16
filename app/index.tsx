@@ -1,4 +1,3 @@
-// app/index.tsx
 import { getBackgroundColor, getWeatherCondition } from "@/automatic/convertBackgroundAndCondition";
 import { useWeatherStore } from "@/data/cities";
 import { Feather } from "@expo/vector-icons";
@@ -17,7 +16,6 @@ export default function Index() {
 
   useFocusEffect(
     useCallback(() => {
-      // Component refocus - data will automatically update from store
     }, [])
   );
 
