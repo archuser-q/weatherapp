@@ -1,5 +1,6 @@
 {
   "expo": {
+    "bundler": "metro",
     "name": "weatherapp",
     "slug": "weatherapp",
     "version": "1.0.0",
