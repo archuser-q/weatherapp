@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { create } from 'zustand';
 
@@ -29,7 +30,11 @@ interface WeatherStore {
     high: string;
     low: string;
   }>;
+  loadCities: () => Promise<void>;
+  saveCities: (cities: CityWeather[]) => Promise<void>;
 }
+
+const STORAGE_KEY = 'weather_cities';
 
 export const useWeatherStore = create<WeatherStore>((set, get) => ({
   cities: [],
@@ -56,6 +61,29 @@ export const useWeatherStore = create<WeatherStore>((set, get) => ({
     }
   },
 
+  saveCities: async (cities: CityWeather[]) => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(cities));
+    } catch (error) {
+      console.error('Error saving cities:', error);
+    }
+  },
+
+  loadCities: async () => {
+    try {
+      set({ loading: true });
+      const savedCities = await AsyncStorage.getItem(STORAGE_KEY);
+      if (savedCities) {
+        set({ cities: JSON.parse(savedCities), loading: false });
+      } else {
+        set({ loading: false });
+      }
+    } catch (error) {
+      console.error('Error loading cities:', error);
+      set({ error: 'Failed to load saved cities', loading: false });
+    }
+  },
+
   addCity: async (location) => {
     set({ loading: true, error: null });
     try {
@@ -69,10 +97,12 @@ export const useWeatherStore = create<WeatherStore>((set, get) => ({
         ...weatherData,
       };
 
-      set((state) => ({
-        cities: [...state.cities, newCity],
+      const updatedCities = [...get().cities, newCity];
+      set({
+        cities: updatedCities,
         loading: false,
-      }));
+      });
+      await get().saveCities(updatedCities);
     } catch (error) {
       set({
         error: 'Failed to fetch weather data',
@@ -81,9 +111,11 @@ export const useWeatherStore = create<WeatherStore>((set, get) => ({
     }
   },
 
-  removeCity: (id: number) => {
-    set((state) => ({
-      cities: state.cities.filter((city) => city.id !== id),
-    }));
+  removeCity: async (id: number) => {
+    const updatedCities = get().cities.filter((city) => city.id !== id);
+    set({
+      cities: updatedCities,
+    });
+    await get().saveCities(updatedCities);
   },
 }));

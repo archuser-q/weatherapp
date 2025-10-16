@@ -2,13 +2,13 @@ import { getBackgroundColor, getWeatherCondition } from "@/automatic/convertBack
 import { useWeatherStore } from "@/data/cities";
 import { Feather } from "@expo/vector-icons";
 import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import "../global.css";
 
 export default function Index() {
   const router = useRouter();
-  const { cities, loading } = useWeatherStore();
+  const { cities, loading, removeCity } = useWeatherStore();
 
   const handleSearchPress = () => {
     router.push("/addLocation");
@@ -19,6 +19,16 @@ export default function Index() {
       // Component refocus
     }, [])
   );
+
+  useFocusEffect(
+    useCallback(() => {
+      useWeatherStore.getState().loadCities();
+    }, [])
+  );
+
+  useEffect(() => {
+    useWeatherStore.getState().loadCities();
+  }, []);
 
   return (
     <View className="flex-1 bg-white">
