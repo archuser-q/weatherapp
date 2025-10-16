@@ -1,16 +1,25 @@
+// app/index.tsx
 import { getBackgroundColor, getWeatherCondition } from "@/automatic/convertBackgroundAndCondition";
-import { cities } from "@/data/cities";
+import { useWeatherStore } from "@/data/cities";
 import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback } from "react";
+import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import "../global.css";
 
 export default function Index() {
   const router = useRouter();
+  const { cities, loading } = useWeatherStore();
 
   const handleSearchPress = () => {
     router.push("/addLocation");
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      // Component refocus - data will automatically update from store
+    }, [])
+  );
 
   return (
     <ScrollView className="px-4 pt-12 pb-5">
@@ -36,30 +45,50 @@ export default function Index() {
       </TouchableOpacity>
 
       <Text className="text-gray-400 text-sm mb-3 pl-2">Added locations</Text>
-      {cities.map((city, index) => {
-        const condition = getWeatherCondition(city.temp);
-        const bgColor = getBackgroundColor(city.temp);
+      
+      {loading && (
+        <View className="items-center justify-center py-8">
+          <ActivityIndicator size="large" color="#3B82F6" />
+          <Text className="text-gray-400 text-sm mt-3">Loading weather data...</Text>
+        </View>
+      )}
+
+      {cities.length === 0 && !loading && (
+        <View className="items-center justify-center py-8">
+          <Feather name="map-pin" size={40} color="#D1D5DB" />
+          <Text className="text-gray-400 text-base mt-3">
+            No cities added yet
+          </Text>
+        </View>
+      )}
+
+      {cities.map((city) => {
+        const condition = getWeatherCondition(parseInt(city.temp));
+        const bgColor = getBackgroundColor(parseInt(city.temp));
         
         return (
           <View
-            key={index}
+            key={city.id}
             className={`${bgColor} rounded-3xl p-5 mb-4 h-40`}
           >
             <View className="flex-row justify-between items-start">
-              <View>
+              <View className="flex-1">
                 <Text className="text-white text-3xl font-semibold mb-1">
                   {city.name}
                 </Text>
                 <Text className="text-white text-base opacity-90">
+                  {city.region}
+                </Text>
+                <Text className="text-white text-sm opacity-75 mt-1">
                   {condition}
                 </Text>
               </View>
               <View className="items-end">
                 <Text className="text-white text-6xl font-light">
-                  {city.temp}
+                  {city.temp}°
                 </Text>
                 <Text className="text-white text-base opacity-90">
-                  {city.high} / {city.low}
+                  {city.high}° / {city.low}°
                 </Text>
               </View>
             </View>

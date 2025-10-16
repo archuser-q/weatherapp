@@ -1,19 +1,23 @@
+// app/addLocation.tsx
+import { useWeatherStore } from "@/data/cities";
 import { LOCATIONS_DATA } from "@/data/fixedCoordinate";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import "../global.css";
 
 const SEARCH_HISTORY_KEY = "search_history";
 
 export default function AddLocation() {
   const router = useRouter();
+  const { addCity, cities } = useWeatherStore();
   const [searchText, setSearchText] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [loadingCityId, setLoadingCityId] = useState<number | null>(null);
 
   useEffect(() => {
     loadSearchHistory();
@@ -57,14 +61,39 @@ export default function AddLocation() {
     }
   };
 
-  const handleSelectLocation = (locationName: string) => {
-    const alreadyExists = searchHistory.includes(locationName);
-    if (!alreadyExists) {
-      const newHistory = [locationName, ...searchHistory];
-      setSearchHistory(newHistory);
-      saveSearchHistory(newHistory);
+  const handleSelectLocation = async (location: typeof LOCATIONS_DATA[0]) => {
+    // Check if city already exists
+    const alreadyExists = cities.some((city) => city.id === location.id);
+    
+    if (alreadyExists) {
+      alert("This location is already added");
+      return;
     }
-    router.back();
+
+    // Update search history
+    const alreadyInHistory = searchHistory.includes(location.name);
+    if (!alreadyInHistory) {
+      const newHistory = [location.name, ...searchHistory].slice(0, 10); // Keep last 10
+      setSearchHistory(newHistory);
+      await saveSearchHistory(newHistory);
+    }
+
+    // Add city to store
+    setLoadingCityId(location.id);
+    try {
+      await addCity({
+        id: location.id,
+        name: location.name,
+        region: location.region,
+        latitude: location.latitude || 0,
+        longitude: location.longitude || 0,
+      });
+      router.back();
+    } catch (error) {
+      alert("Failed to add location. Please try again.");
+    } finally {
+      setLoadingCityId(null);
+    }
   };
 
   const clearSearchHistory = async () => {
@@ -92,20 +121,33 @@ export default function AddLocation() {
 
         {isSearching && filteredResults.length > 0 ? (
           <View>
-            {filteredResults.map((location) => (
-              <TouchableOpacity
-                key={location.id}
-                className="bg-white rounded-2xl p-4 mb-3 border-b border-gray-100"
-                onPress={() => handleSelectLocation(location.name)}
-              >
-                <Text className="text-black text-base font-semibold">
-                  {location.name}
-                </Text>
-                <Text className="text-gray-400 text-sm mt-1">
-                  {location.region}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            {filteredResults.map((location) => {
+              const isAdded = cities.some((city) => city.id === location.id);
+              const isLoading = loadingCityId === location.id;
+              
+              return (
+                <TouchableOpacity
+                  key={location.id}
+                  className="bg-white rounded-2xl p-4 mb-3 border-b border-gray-100 flex-row justify-between items-center"
+                  onPress={() => handleSelectLocation(location)}
+                  disabled={isAdded || isLoading}
+                >
+                  <View className="flex-1">
+                    <Text className={`text-base font-semibold ${isAdded ? 'text-gray-400' : 'text-black'}`}>
+                      {location.name}
+                    </Text>
+                    <Text className="text-gray-400 text-sm mt-1">
+                      {location.region}
+                    </Text>
+                  </View>
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color="#3B82F6" />
+                  ) : isAdded ? (
+                    <Feather name="check-circle" size={20} color="#10B981" />
+                  ) : null}
+                </TouchableOpacity>
+              );
+            })}
           </View>
         ) : isSearching && filteredResults.length === 0 ? (
           <View className="items-center justify-center py-8">
@@ -145,6 +187,7 @@ export default function AddLocation() {
               </View>
             ) : (
               <Text className="text-gray-400 text-sm mb-6 pt-5">
+                No search history yet
               </Text>
             )}
           </>
