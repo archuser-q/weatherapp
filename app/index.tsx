@@ -1,15 +1,10 @@
 import { getBackgroundColor, getWeatherCondition } from "@/automatic/convertBackgroundAndCondition";
+import { cities } from "@/data/cities";
 import { Feather } from "@expo/vector-icons";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import "../global.css";
 
 export default function Index() {
-  const cities = [
-    { name: "Hanoi", temp: "10°", high: "31°", low: "23°" },
-    { name: "Delhi", temp: "24°", high: "31°", low: "19°" },
-    { name: "Kuala Lumpur", temp: "32°", high: "32°", low: "24°" },
-  ];
-
   return (
     <ScrollView className="px-4">
       <Text
