@@ -11,7 +11,12 @@ export default function Index() {
 
   return (
     <ScrollView className="px-4">
-      <Text className="text-4xl font-normal py-5 pl-4">Manage cities</Text>
+      <Text 
+        className="text-4xl font-normal pt-5 pb-3 pl-4"
+        style={{ lineHeight: 50 }}
+      >
+        Manage cities
+      </Text>
       
       <View className="bg-gray-200 rounded-full flex-row items-center px-3 pl-5 mb-6">
         <Feather name="search" size={20} color="#9CA3AF" />
