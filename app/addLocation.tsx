@@ -1,10 +1,13 @@
 import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import "../global.css";
 
-export default function Index() {
+export default function AddLocation() {
+  const router = useRouter();
+
   return (
-    <ScrollView className="flex-1 bg-gray-50">
+    <ScrollView className="flex-1 bg-gray-50 px-4 pt-12 pb-5">
       <View className="px-5 pt-3">
         <View className="bg-gray-100 rounded-3xl flex-row items-center px-4 mb-5">
           <Feather name="search" size={20} color="#9CA3AF" />
@@ -12,8 +15,11 @@ export default function Index() {
             placeholder="Enter location"
             placeholderTextColor="#9CA3AF"
             className="flex-1 py-4 pl-3 text-base"
+            autoFocus
           />
-          <Text className="text-blue-500 text-base">Cancel</Text>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text className="text-blue-500 text-base font-semibold">Cancel</Text>
+          </TouchableOpacity>
         </View>
 
         <Text className="text-gray-400 text-base mb-3">Current location</Text>
