@@ -101,37 +101,36 @@ export default function Index() {
                 renderRightActions={() => renderRightActions(city.id)}
                 overshootRight={false}
               >
-                <View className={`${bgColor} rounded-3xl p-5 mb-4 h-[105px]`}>
-                  <View className="flex-row justify-between items-start">
-                    <View className="flex-1">
-                      <Text className="text-white text-3xl font-semibold mb-1">
-                        {city.name}
-                      </Text>
-                      <Text className="text-white text-sm opacity-75 mt-1">
-                        {condition}
-                      </Text>
-                    </View>
-                    <View className="items-end">
-                      <Text className="text-white text-5xl font-medium">
-                        {city.temp}°
-                      </Text>
-                      <Text className="text-white text-base opacity-90">
-                        {city.high}° / {city.low}°
-                      </Text>
+                <TouchableOpacity 
+                  onPress={() => router.push({
+                    pathname: "/detail",
+                    params: { cityId: city.id, cityName: city.name, temp: city.temp }
+                  })}
+                >
+                  <View className={`${bgColor} rounded-3xl p-5 mb-4 h-[105px]`}>
+                    <View className="flex-row justify-between items-start">
+                      <View className="flex-1">
+                        <Text className="text-white text-3xl font-semibold mb-1">
+                          {city.name}
+                        </Text>
+                        <Text className="text-white text-sm opacity-75 mt-1">
+                          {condition}
+                        </Text>
+                      </View>
+                      <View className="items-end">
+                        <Text className="text-white text-5xl font-medium">
+                          {city.temp}°
+                        </Text>
+                        <Text className="text-white text-base opacity-90">
+                          {city.high}° / {city.low}°
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               </Swipeable>
             );
           })}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => router.push("/detail")}
-          >
-            <View className="bg-blue-500 rounded-full px-5 py-3 mb-6 self-start ml-4">
-              <Text className="text-white text-base font-medium">Go to Detail</Text>
-            </View>
-          </TouchableOpacity>
 
         </ScrollView>
       </View>

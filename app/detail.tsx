@@ -1,7 +1,9 @@
 import { Feather } from "@expo/vector-icons";
+import { useRouter } from 'expo-router';
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function Detail() {
+  const router = useRouter();
   return (
     <ImageBackground
       source={require("../assets/43e9c51f7b907d1961a23df3fc2c7f78.gif")}
@@ -14,7 +16,7 @@ export default function Detail() {
       >
         {/* Header */}
         <View className="flex-row justify-end items-center mt-16 mb-14 gap-5">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>router.push('/')}>
             <Feather name="plus" size={30} color="white" />
           </TouchableOpacity>
           <TouchableOpacity>
