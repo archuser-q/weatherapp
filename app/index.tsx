@@ -124,6 +124,15 @@ export default function Index() {
               </Swipeable>
             );
           })}
+          <TouchableOpacity
+  activeOpacity={0.7}
+  onPress={() => router.push("/detail")}
+>
+  <View className="bg-blue-500 rounded-full px-5 py-3 mb-6 self-start ml-4">
+    <Text className="text-white text-base font-medium">Go to Detail</Text>
+  </View>
+</TouchableOpacity>
+
         </ScrollView>
       </View>
     </GestureHandlerRootView>
