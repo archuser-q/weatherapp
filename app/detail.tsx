@@ -105,44 +105,6 @@ export default function Detail() {
             </View>
           </View>
         </View>
-
-        <View className="mb-12">
-            {/* UV and Humidity */}
-            <View className="flex-row gap-4 mb-4">
-                <View className="flex-1 bg-white/20 backdrop-blur-md rounded-3xl px-6 py-6">
-                <Text className="text-gray-300 text-sm mb-4">UV</Text>
-                <Text className="text-white text-3xl font-semibold mb-4">Weak</Text>
-                </View>
-                <View className="flex-1 bg-white/20 backdrop-blur-md rounded-3xl px-6 py-6">
-                <Text className="text-gray-300 text-sm mb-4">Humidity</Text>
-                <Text className="text-white text-3xl font-semibold mb-4">74%</Text>
-                </View>
-            </View>
-            
-            {/* Real Feel and Wind */}
-            <View className="flex-row gap-4 mb-4">
-                <View className="flex-1 bg-white/20 backdrop-blur-md rounded-3xl px-6 py-6">
-                <Text className="text-gray-300 text-sm mb-4">Real feel</Text>
-                <Text className="text-white text-3xl font-semibold">31°</Text>
-                </View>
-                <View className="flex-1 bg-white/20 backdrop-blur-md rounded-3xl px-6 py-6">
-                <Text className="text-gray-300 text-sm mb-4">Southeast</Text>
-                <Text className="text-white text-3xl font-semibold">Force 3</Text>
-                </View>
-            </View>
-            
-            {/* Sunset and Pressure */}
-            <View className="flex-row gap-4">
-                <View className="flex-1 bg-white/20 backdrop-blur-md rounded-3xl px-6 py-6">
-                <Text className="text-gray-300 text-sm mb-4">Sunset</Text>
-                <Text className="text-white text-3xl font-semibold">17:31</Text>
-                </View>
-                <View className="flex-1 bg-white/20 backdrop-blur-md rounded-3xl px-6 py-6">
-                <Text className="text-gray-300 text-sm mb-4">Pressure</Text>
-                <Text className="text-white text-3xl font-semibold">1000</Text>
-                </View>
-            </View>
-        </View>
       </ScrollView>
     </ImageBackground>
   );
