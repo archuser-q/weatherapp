@@ -25,7 +25,7 @@ export default function Detail() {
         </View>
 
         {/* Main Temperature Section */}
-        <View className="mb-96">
+        <View className="mb-72">
           <Text className="text-2xl font-normal text-white">Hanoi</Text>
           <Text className="text-[148px] font-light text-white">31°</Text>
           <Text className="text-xl text-white">Showers 30°/24°</Text>
@@ -39,17 +39,12 @@ export default function Detail() {
             { day: "Fri", icon: "⛅", min: 24, max: 32 },
             ].map((item, i) => (
                 <View key={i} className="flex-row items-center mb-6">
-                {/* Cột 1: Tên ngày */}
                 <View className="flex-[1.2]">
                     <Text className="text-lg text-white font-light">{item.day}</Text>
                 </View>
-
-                {/* Cột 2: Icon */}
                 <View className="flex-[0.8] items-center">
                     <Text className="text-2xl">{item.icon}</Text>
                 </View>
-
-                {/* Cột 3: Thanh nhiệt độ */}
                 <View className="flex-[2] flex-row justify-end items-center self-center">
                     <Text className="text-white text-base min-w-[28px] text-right">{item.min}°</Text>
                     <View className="w-16 h-[3px] bg-orange-400 rounded-full mx-2" />

@@ -2,7 +2,6 @@ import { useWeatherStore } from "@/data/cities";
 import { LOCATIONS_DATA } from "@/data/fixedCoordinate";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -101,61 +100,6 @@ export default function AddLocation() {
     await saveSearchHistory([]);
   };
 
-  const findNearestLocation = (latitude: number, longitude: number) => {
-    let nearest = LOCATIONS_DATA[0];
-    let minDistance = Number.MAX_VALUE;
-
-    for (const location of LOCATIONS_DATA) {
-      if (location.latitude == null || location.longitude == null) continue;
-
-      const distance = Math.sqrt(
-        Math.pow(location.latitude - latitude, 2) +
-        Math.pow(location.longitude - longitude, 2)
-      );
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        nearest = location;
-      }
-    }
-
-    return nearest;
-  };
-
-  const handleGetCurrentLocation = async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        alert("Permission to access location was denied");
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync({});
-      const { latitude, longitude } = location.coords;
-
-      const nearest = findNearestLocation(latitude, longitude);
-
-      const alreadyExists = cities.some((city) => city.id === nearest.id);
-      if (alreadyExists) {
-        alert("This location is already added");
-        return;
-      }
-
-      await addCity({
-        id: nearest.id,
-        name: nearest.name,
-        region: nearest.region,
-        latitude,
-        longitude,
-      });
-
-      router.back();
-    } catch (error) {
-      console.error("Error getting current location:", error);
-      alert("Failed to get current location");
-    }
-  };
-
   return (
     <ScrollView className="flex-1 bg-gray-50 px-4 pt-12 pb-5">
       <View className="px-5 pt-3">
@@ -216,7 +160,6 @@ export default function AddLocation() {
             <Text className="text-gray-400 text-base mb-3">Current location</Text>
             <TouchableOpacity
               className="bg-white rounded-2xl p-4 mb-6 flex-row"
-              onPress={handleGetCurrentLocation}
             >
               <Feather name="map-pin" size={22} color="#3B82F6" />
               <Text className="text-blue-500 text-base ml-3">
